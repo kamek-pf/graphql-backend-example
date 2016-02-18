@@ -140,8 +140,14 @@ async function rootResolver(element, args, tableName) {
 
 // @TODO: remove Root and use Query
 // The schema itself
-const Schema = new GraphQLSchema({
+const RelaySchema = new GraphQLSchema({
     query: Root
 });
 
-export default Schema;
+// @TODO: remove Root and use Query
+// The schema itself
+const Schema = new GraphQLSchema({
+    query: Query
+});
+
+export { RelaySchema, Schema };
