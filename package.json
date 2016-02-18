@@ -23,6 +23,7 @@
   "author": "kamek",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "express-graphql": "^0.4.9",
     "graphql": "^0.4.17",
