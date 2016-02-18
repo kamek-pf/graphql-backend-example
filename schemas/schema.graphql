@@ -12,6 +12,10 @@ type Query {
   players(id: String, name: String, firstName: String, lastName: String, team: String, gender: String): [Player]
 }
 
+type Root {
+  root: Query
+}
+
 type Team {
   id: String
   tag: String

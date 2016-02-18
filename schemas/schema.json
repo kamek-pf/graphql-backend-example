@@ -2,11 +2,34 @@
   "data": {
     "__schema": {
       "queryType": {
-        "name": "Query"
+        "name": "Root"
       },
       "mutationType": null,
       "subscriptionType": null,
       "types": [
+        {
+          "kind": "OBJECT",
+          "name": "Root",
+          "description": null,
+          "fields": [
+            {
+              "name": "root",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Query",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
         {
           "kind": "OBJECT",
           "name": "Query",

@@ -1,4 +1,5 @@
 import {
+    GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
     GraphQLSchema,
@@ -114,6 +115,19 @@ const Query = new GraphQLObjectType({
     }
 });
 
+// @TODO: Remove this
+// See : https://github.com/facebook/relay/issues/112
+// TL;DR: This 'root' object is a work around and should go away when #112 gets fixed
+const Root = new GraphQLObjectType({
+    name: 'Root',
+    fields: {
+        root: {
+            type: Query,
+            resolve: () => ({})
+        }
+    }
+});
+
 // Resolver used in the root query
 async function rootResolver(element, args, tableName) {
     const connection = await pendingConnection;
@@ -124,9 +138,10 @@ async function rootResolver(element, args, tableName) {
     return await cursor.toArray();
 }
 
+// @TODO: remove Root and use Query
 // The schema itself
 const Schema = new GraphQLSchema({
-    query: Query
+    query: Root
 });
 
 export default Schema;
