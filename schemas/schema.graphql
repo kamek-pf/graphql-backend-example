@@ -1,0 +1,19 @@
+type Player {
+  id: String
+  name: String
+  firstName: String
+  lastName: String
+  team: Team
+  gender: String
+}
+
+type Query {
+  teams(id: String, name: String, tag: String): [Team]
+  players(id: String, name: String, firstName: String, lastName: String, team: String, gender: String): [Player]
+}
+
+type Team {
+  id: String
+  tag: String
+  name: String
+}

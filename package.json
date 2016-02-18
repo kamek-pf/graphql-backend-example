@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --config webpack.backend.js",
     "watch": "webpack --config webpack.backend.js --watch",
-    "dev": "nodemon build/backend/backend.js",
+    "dev": "nodemon build/backend.js",
+    "update-schema": "babel-node scripts/updateSchema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

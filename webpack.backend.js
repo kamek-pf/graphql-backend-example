@@ -16,11 +16,11 @@ fs.readdirSync('node_modules')
     });
 
 const backendConfig = {
-    entry: './src/app.js',
+    entry: './app/app.js',
     target: 'node',
     externals: nodeModules,
     output: {
-        path: path.join(__dirname, 'build/backend'),
+        path: path.join(__dirname, 'build'),
         filename: 'backend.js'
     },
     module: {
