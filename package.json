@@ -1,0 +1,37 @@
+{
+  "name": "graphql-proto",
+  "version": "1.0.0",
+  "description": "A small prototype for an app using ES6 code, GraphQL, Relay and React",
+  "main": "app.js",
+  "scripts": {
+    "build": "webpack --config webpack.backend.js",
+    "watch": "webpack --config webpack.backend.js --watch",
+    "dev": "nodemon build/backend/backend.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "relay",
+    "graphql",
+    "express",
+    "babel",
+    "webpack",
+    "es6",
+    "es7"
+  ],
+  "author": "kamek",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-graphql": "^0.4.9",
+    "graphql": "^0.4.17",
+    "rethinkdb": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-loader": "^6.2.2",
+    "babel-preset-node5": "^10.5.0",
+    "json-loader": "^0.5.4",
+    "webpack": "^1.12.13"
+  }
+}
