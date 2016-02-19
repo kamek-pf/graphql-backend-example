@@ -1,4 +1,5 @@
 import {
+    GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString,
     GraphQLSchema,
@@ -97,7 +98,7 @@ const Query = new GraphQLObjectType({
                 name: { type: GraphQLString },
                 tag: { type: GraphQLString }
             },
-            resolve: (root, args) => rootResolver(root, args, 'teams')
+            resolve: (source, args) => rootResolver(source, args, 'teams')
         },
         players: {
             type: new GraphQLList(Player),
@@ -109,7 +110,45 @@ const Query = new GraphQLObjectType({
                 team: { type: GraphQLString },
                 gender: { type: GraphQLString }
             },
-            resolve: (root, args) => rootResolver(root, args, 'players')
+            resolve: (source, args) => rootResolver(source, args, 'players')
+        }
+    }
+});
+
+// Resolver used in the root query
+async function rootResolver(parent, args, tableName) {
+    const connection = await pendingConnection;
+    const cursor = await db.table(tableName)
+        .filter(args)
+        .run(connection);
+
+    return await cursor.toArray();
+}
+
+const Mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    description: 'Alter tables with this',
+    fields: {
+        addPlayer: {
+            type: Player,
+            args: {
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                firstName: { type: GraphQLString },
+                lastName: { type: GraphQLString },
+                email: { type: GraphQLString }
+            },
+            resolve: async function (source, args) {
+                const connection = await pendingConnection;
+                const insertion = await db.table('players')
+                    .insert(args)
+                    .run(connection);
+
+                const id = insertion.generated_keys[0];
+                const result = await db.table('players').get(id)
+                    .run(connection);
+
+                return result;
+            }
         }
     }
 });
@@ -127,26 +166,18 @@ const Root = new GraphQLObjectType({
     }
 });
 
-// Resolver used in the root query
-async function rootResolver(element, args, tableName) {
-    const connection = await pendingConnection;
-    const cursor = await db.table(tableName)
-        .filter(args)
-        .run(connection);
-
-    return await cursor.toArray();
-}
-
 // @TODO: remove Root and use Query
 // The schema itself
 const RelaySchema = new GraphQLSchema({
-    query: Root
+    query: Root,
+    mutation: Mutation
 });
 
 // @TODO: remove Root and use Query
 // The schema itself
 const Schema = new GraphQLSchema({
-    query: Query
+    query: Query,
+    mutation: Mutation
 });
 
 export { RelaySchema, Schema };
