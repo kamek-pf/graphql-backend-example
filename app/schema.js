@@ -167,13 +167,11 @@ const Root = new GraphQLObjectType({
 });
 
 // @TODO: remove Root and use Query
-// The schema itself
 const RelaySchema = new GraphQLSchema({
     query: Root,
     mutation: Mutation
 });
 
-// @TODO: remove Root and use Query
 // The schema itself
 const Schema = new GraphQLSchema({
     query: Query,
