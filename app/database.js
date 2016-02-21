@@ -7,4 +7,6 @@ async function createConnection() {
     return await r.connect(config);
 }
 
-export { db, createConnection };
+const conn = createConnection();
+
+export { db, conn };
