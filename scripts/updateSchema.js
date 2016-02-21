@@ -1,8 +1,6 @@
-#!/usr/bin/env babel-node --optional es7.asyncFunctions
-
 import fs from 'fs';
 import path from 'path';
-import Schema from '../app/schema';
+import { Schema } from '../app/schema/schema';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 
@@ -16,7 +14,7 @@ async function updateSchema() {
         );
     } else {
         fs.writeFileSync(
-            path.join(__dirname, '../schemas/schema.json'),
+            path.join(__dirname, '../build/schema.json'),
             JSON.stringify(result, null, 2)
         );
         console.log('Schema generated');
@@ -27,6 +25,6 @@ updateSchema();
 
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
-    path.join(__dirname, '../schemas/schema.graphql'),
+    path.join(__dirname, '../build/schema.graphql'),
     printSchema(Schema)
 );
