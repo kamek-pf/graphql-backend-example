@@ -1,6 +1,6 @@
 import Express from 'express';
 import GraphHTTP from 'express-graphql';
-import { Schema, RelaySchema } from './schema/schema';
+import { Schema, RelaySchema } from 'schema/schema';
 import cors from 'cors';
 
 // Config

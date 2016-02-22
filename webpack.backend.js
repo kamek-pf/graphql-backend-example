@@ -2,23 +2,12 @@
 
 const path = require('path');
 const webpack = require('webpack');
-const fs = require('fs');
-
-let nodeModules = {};
-
-// Exclude binary assets from the backend bundle
-fs.readdirSync('node_modules')
-    .filter(function (x) {
-        return ['.bin'].indexOf(x) === -1;
-    })
-    .forEach(function (mod) {
-        nodeModules[mod] = 'commonjs ' + mod;
-    });
+const nodeExternals = require('webpack-node-externals');
 
 const backendConfig = {
     entry: './app/app.js',
     target: 'node',
-    externals: nodeModules,
+    externals: [nodeExternals()],
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'backend.js'
@@ -41,6 +30,12 @@ const backendConfig = {
         new webpack.IgnorePlugin(/\.(css|less)$/),
         new webpack.BannerPlugin('require("source-map-support").install();', { raw: true, entryOnly: false })
     ],
+    resolve: {
+        extensions: ['', '.js', '.json'],
+        root: [
+            path.resolve('./app')
+        ]
+    },
     devtool: 'sourcemap'
 };
 

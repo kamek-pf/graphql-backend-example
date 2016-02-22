@@ -3,8 +3,8 @@ import {
     GraphQLSchema
 } from 'graphql';
 
-import { PlayerQuery, PlayerMutation } from './types/player';
-import { TeamQuery } from './types/team';
+import { PlayerQuery, PlayerMutation } from 'schema/types/player';
+import { TeamQuery } from 'schema/types/team';
 
 // Main Query object
 const Query = new GraphQLObjectType({

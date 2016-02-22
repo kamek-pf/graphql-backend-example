@@ -4,7 +4,7 @@ import {
     GraphQLList
 } from 'graphql';
 
-import { rootResolver } from '../resolvers';
+import DataSource from 'database';
 
 // Representation of the Team table
 const Team = new GraphQLObjectType({
@@ -40,7 +40,7 @@ const TeamQuery = {
             name: { type: GraphQLString },
             tag: { type: GraphQLString }
         },
-        resolve: (source, args) => rootResolver(source, args, 'teams')
+        resolve: (source, args) => DataSource.find('teams', args)
     }
 };
 

@@ -5,13 +5,8 @@ import {
     GraphQLList
 } from 'graphql';
 
-import {
-    db,
-    conn as pendingConnection
-} from '../../database';
-
+import DataSource from 'database';
 import { Team } from './team';
-import { rootResolver } from '../resolvers';
 
 // Representation of the Player table
 const Player = new GraphQLObjectType({
@@ -44,14 +39,7 @@ const Player = new GraphQLObjectType({
         },
         team: {
             type: Team,
-            resolve: async function(player) {
-                const connection = await pendingConnection;
-                const cursor = await db.table('teams')
-                    .filter({ id: player.team })
-                    .run(connection);
-
-                return await cursor.next();
-            }
+            resolve: (player) => DataSource.findOne('teams', player.team)
         },
         gender: {
             type: GraphQLString,
@@ -73,7 +61,7 @@ const PlayerQuery = {
             team: { type: GraphQLString },
             gender: { type: GraphQLString }
         },
-        resolve: (source, args) => rootResolver(source, args, 'players')
+        resolve: (source, args) => DataSource.find('players', args)
     }
 };
 
@@ -86,18 +74,7 @@ const PlayerMutation = {
             lastName: { type: GraphQLString },
             email: { type: GraphQLString }
         },
-        resolve: async function (source, args) {
-            const connection = await pendingConnection;
-            const insertion = await db.table('players')
-            .insert(args)
-            .run(connection);
-
-            const id = insertion.generated_keys[0];
-            const result = await db.table('players').get(id)
-            .run(connection);
-
-            return result;
-        }
+        resolve: (source, args) => DataSource.insert('players', args)
     }
 };
 
