@@ -12,7 +12,6 @@ const Root = new GraphQLObjectType({
     name: 'Root',
     description: 'Root query object',
     fields: {
-        node: nodeField,
         teams: TeamQuery.teamList,
         players: PlayerQuery.playerList
     }
@@ -32,6 +31,7 @@ const Mutation = new GraphQLObjectType({
 const Viewer = new GraphQLObjectType({
     name: 'Viewer',
     fields: {
+        node: nodeField,
         root: {
             type: Root,
             resolve: () => ({})
