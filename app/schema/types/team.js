@@ -1,12 +1,11 @@
 import {
     GraphQLObjectType,
-    GraphQLString
+    GraphQLNonNull,
+    GraphQLString,
+    GraphQLList
 } from 'graphql';
 
 import {
-    connectionFromPromisedArray,
-    connectionDefinitions,
-    connectionArgs,
     globalIdField
 } from 'graphql-relay';
 
@@ -35,24 +34,21 @@ const Team = new GraphQLObjectType({
     }
 });
 
-// Used below, a node representing a list of teams has a connection with
-// each team node
-const { connectionType: teamConnection } = connectionDefinitions({
-    name: 'Team',
-    nodeType: Team
-});
-
-// Main query object.
-// teamList is just an entry point : a node connected to all the team nodes.
 const TeamQuery = {
-    teamList: {
-        type: teamConnection,
-        args: connectionArgs,
-        resolve: (source, args) => connectionFromPromisedArray(
-            DataSource.find('teams', args),
-            args
-        )
+    teams: {
+        type: new GraphQLList(Team),
+        resolve: (source, args) => DataSource.find('teams', args)
     }
 };
 
-export { Team, TeamQuery };
+const TeamMutation = {
+    addTeam: {
+        type: Team,
+        args: {
+            name: { type: new GraphQLNonNull(GraphQLString) }
+        },
+        resolve: (source, args) => DataSource.insert('teams', 'Team', args)
+    }
+};
+
+export { Team, TeamQuery, TeamMutation };

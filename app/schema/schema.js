@@ -4,15 +4,15 @@ import {
 } from 'graphql';
 
 import { PlayerQuery, PlayerMutation } from './types/player';
+import { TeamQuery, TeamMutation } from './types/team';
 import { nodeField } from './relayMapping';
-import { TeamQuery } from './types/team';
 
 // Main Query object
 const Root = new GraphQLObjectType({
     name: 'Root',
     description: 'Root query object',
     fields: {
-        teams: TeamQuery.teamList,
+        teams: TeamQuery.teams,
         players: PlayerQuery.playerList
     }
 });
@@ -22,7 +22,8 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Alter tables with this',
     fields: {
-        addPlayer: PlayerMutation.addPlayer
+        addPlayer: PlayerMutation.addPlayer,
+        addTeam: TeamMutation.addTeam
     }
 });
 
