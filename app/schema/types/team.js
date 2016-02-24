@@ -1,22 +1,25 @@
 import {
     GraphQLObjectType,
-    GraphQLString,
-    GraphQLList
+    GraphQLString
 } from 'graphql';
 
+import {
+    connectionFromPromisedArray,
+    connectionDefinitions,
+    connectionArgs,
+    globalIdField
+} from 'graphql-relay';
+
 import DataSource from 'database';
+import { nodeInterface } from 'schema/relayMapping';
 
 // Representation of the Team table
 const Team = new GraphQLObjectType({
     name: 'Team',
     descripton: 'CS:GO Teams',
+    interfaces: [nodeInterface],
     fields: {
-        id: {
-            type: GraphQLString,
-            resolve(team) {
-                return team.id;
-            }
-        },
+        id: globalIdField(),
         tag: {
             type: GraphQLString,
             resolve(team) {
@@ -32,15 +35,23 @@ const Team = new GraphQLObjectType({
     }
 });
 
+// Used below, a node representing a list of teams has a connection with
+// each team node
+const { connectionType: teamConnection } = connectionDefinitions({
+    name: 'Team',
+    nodeType: Team
+});
+
+// Main query object.
+// teamList is just an entry point : a node connected to all the team nodes.
 const TeamQuery = {
     teamList: {
-        type: new GraphQLList(Team),
-        args: {
-            id: { type: GraphQLString },
-            name: { type: GraphQLString },
-            tag: { type: GraphQLString }
-        },
-        resolve: (source, args) => DataSource.find('teams', args)
+        type: teamConnection,
+        args: connectionArgs,
+        resolve: (source, args) => connectionFromPromisedArray(
+            DataSource.find('teams', args),
+            args
+        )
     }
 };
 

@@ -7,7 +7,8 @@
     "build": "webpack --config webpack.backend.js",
     "watch": "webpack --config webpack.backend.js --watch",
     "dev": "nodemon build/backend.js",
-    "update-schema": "babel-node scripts/updateSchema.js",
+    "update-schema": "webpack build && node build/updateSchema",
+    "copy-schema": "cp build/schema.json ../graphql-frontend-example/dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

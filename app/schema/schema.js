@@ -3,14 +3,16 @@ import {
     GraphQLSchema
 } from 'graphql';
 
-import { PlayerQuery, PlayerMutation } from 'schema/types/player';
-import { TeamQuery } from 'schema/types/team';
+import { PlayerQuery, PlayerMutation } from './types/player';
+import { nodeField } from './relayMapping';
+import { TeamQuery } from './types/team';
 
 // Main Query object
-const Query = new GraphQLObjectType({
-    name: 'Query',
+const Root = new GraphQLObjectType({
+    name: 'Root',
     description: 'Root query object',
     fields: {
+        node: nodeField,
         teams: TeamQuery.teamList,
         players: PlayerQuery.playerList
     }
@@ -25,30 +27,21 @@ const Mutation = new GraphQLObjectType({
     }
 });
 
-// @TODO: Remove this
+// @TODO: Remove this and use Root directly
 // See : https://github.com/facebook/relay/issues/112
-// TL;DR: This 'root' object is a work around and should go away when #112 gets fixed
-const Root = new GraphQLObjectType({
-    name: 'Root',
+const Viewer = new GraphQLObjectType({
+    name: 'Viewer',
     fields: {
         root: {
-            type: Query,
+            type: Root,
             resolve: () => ({})
         }
     }
 });
 
-// @TODO: Remove this
-// See : https://github.com/facebook/relay/issues/112
-const RelaySchema = new GraphQLSchema({
-    query: Root,
-    mutation: Mutation
-});
-
-// The schema itself
 const Schema = new GraphQLSchema({
-    query: Query,
+    query: Viewer,
     mutation: Mutation
 });
 
-export { RelaySchema, Schema };
+export default Schema;

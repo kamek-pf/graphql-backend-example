@@ -4,6 +4,7 @@ import {
 } from 'graphql-relay';
 
 import DataSource from 'database';
+import getSchemaType from './typeRegistry';
 
 const getObjectFromId = (globalId) => {
     const { type, id } = fromGlobalId(globalId);
@@ -20,15 +21,8 @@ const getObjectFromId = (globalId) => {
     }
 };
 
-// @TODO
 const getTypeFromObject = (obj) => {
-    if (obj instanceof Game) {
-        return gameType;
-    } else if (obj instanceof HidingSpot)  {
-        return hidingSpotType;
-    } else {
-        return null;
-    }
+    return getSchemaType(obj.type);
 };
 
 export const { nodeInterface, nodeField } = nodeDefinitions(getObjectFromId, getTypeFromObject);

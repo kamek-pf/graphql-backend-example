@@ -1,6 +1,5 @@
 import fs from 'fs';
-import path from 'path';
-import { Schema } from '../app/schema/schema';
+import Schema from '../app/schema/schema';
 import { graphql }  from 'graphql';
 import { introspectionQuery, printSchema } from 'graphql/utilities';
 
@@ -14,7 +13,7 @@ async function updateSchema() {
         );
     } else {
         fs.writeFileSync(
-            path.join(__dirname, '../build/schema.json'),
+            './build/schema.json',
             JSON.stringify(result, null, 2)
         );
         console.log('Schema generated');
@@ -25,6 +24,6 @@ updateSchema();
 
 // Save user readable type system shorthand of schema
 fs.writeFileSync(
-    path.join(__dirname, '../build/schema.graphql'),
+    './build/schema.graphql',
     printSchema(Schema)
 );

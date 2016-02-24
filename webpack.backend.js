@@ -5,12 +5,15 @@ const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
 const backendConfig = {
-    entry: './app/app.js',
+    entry: {
+        backend: './app/app.js',
+        updateSchema: './scripts/updateSchema.js'
+    },
     target: 'node',
     externals: [nodeExternals()],
     output: {
         path: path.join(__dirname, 'build'),
-        filename: 'backend.js'
+        filename: '[name].js'
     },
     module: {
         loaders: [{

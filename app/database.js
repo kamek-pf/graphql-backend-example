@@ -1,6 +1,8 @@
 import r from 'rethinkdb';
 import config from './dbConfig';
 
+import { fromGlobalId } from 'graphql-relay';
+
 const db = r.db(config.dbName);
 
 async function createConnection() {
@@ -12,9 +14,15 @@ const pendingConnection = createConnection();
 const DataSource = {
     // Find multiple elements
     find: async function find(tableName, args) {
+        let alteredArgs = {};
+        if (args.id) {
+            const { id } = fromGlobalId(args.id);
+            alteredArgs = { id };
+        }
+
         const connection = await pendingConnection;
         const cursor = await db.table(tableName)
-            .filter(args)
+            .filter(alteredArgs)
             .run(connection);
 
         return await cursor.toArray();
@@ -31,10 +39,10 @@ const DataSource = {
     },
 
     // Insert one element
-    insert: async function insert(tableName, args) {
+    insert: async function insert(tableName, type, args) {
         const connection = await pendingConnection;
         const insertion = await db.table(tableName)
-            .insert(args)
+            .insert({ type, ...args })
             .run(connection);
 
         const id = insertion.generated_keys[0];
