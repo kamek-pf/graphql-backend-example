@@ -13,7 +13,7 @@ const pendingConnection = createConnection();
 
 const DataSource = {
     // Find multiple elements
-    find: async function find(tableName, args) {
+    find: async (tableName, args) => {
         let alteredArgs = {};
         if (args.id) {
             const { id } = fromGlobalId(args.id);
@@ -29,7 +29,7 @@ const DataSource = {
     },
 
     // Find one element
-    findOne: async function findOne(tableName, id) {
+    findOne: async (tableName, id) => {
         const connection = await pendingConnection;
         const result = await db.table(tableName)
             .get(id)
@@ -39,7 +39,7 @@ const DataSource = {
     },
 
     // Insert one element
-    insert: async function insert(tableName, type, args) {
+    insert: async (tableName, type, args) => {
         const connection = await pendingConnection;
         const insertion = await db.table(tableName)
             .insert({ type, ...args })

@@ -6,6 +6,7 @@ import {
 } from 'graphql';
 
 import {
+    mutationWithClientMutationId,
     globalIdField
 } from 'graphql-relay';
 
@@ -34,6 +35,18 @@ const Team = new GraphQLObjectType({
     }
 });
 
+// Add a new player
+const AddTeamMutation = mutationWithClientMutationId({
+    name: 'AddTeamMutation',
+    inputFields: {
+        name: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    mutateAndGetPayload: async ({ name }) => {
+        return await DataSource.insert('teams', 'Team', { name });
+    }
+});
+
+// Main query object
 const TeamQuery = {
     teams: {
         type: new GraphQLList(Team),
@@ -41,14 +54,9 @@ const TeamQuery = {
     }
 };
 
+// Main mutation object
 const TeamMutation = {
-    addTeam: {
-        type: Team,
-        args: {
-            name: { type: new GraphQLNonNull(GraphQLString) }
-        },
-        resolve: (source, args) => DataSource.insert('teams', 'Team', args)
-    }
+    addTeam: AddTeamMutation
 };
 
 export { Team, TeamQuery, TeamMutation };
