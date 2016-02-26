@@ -4,16 +4,16 @@ import {
 } from 'graphql';
 
 import getModel from './typeRegistry';
-import User from './types/user';
+import Root from './types/root';
 import { nodeField } from './relayMapping';
 
 // Main Query object
-const Root = new GraphQLObjectType({
-    name: 'Root',
+const Query = new GraphQLObjectType({
+    name: 'Query',
     fields: {
         node: nodeField,
-        viewer: {
-            type: User,
+        root: {
+            type: Root,
             resolve: () => ({}) // The user type has no data, it's just an entry point
         }
     }
@@ -25,12 +25,13 @@ const Mutation = new GraphQLObjectType({
     description: 'Alter tables with this',
     fields: {
         addPlayer: getModel('Player').mutation.addPlayer,
-        addTeam: getModel('Team').mutation.addTeam
+        addTeam: getModel('Team').mutation.addTeam,
+        capitalizeTeam: getModel('Team').mutation.capitalizeTeam
     }
 });
 
 const Schema = new GraphQLSchema({
-    query: Root,
+    query: Query,
     mutation: Mutation
 });
 

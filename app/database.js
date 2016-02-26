@@ -11,6 +11,8 @@ async function createConnection() {
 
 const pendingConnection = createConnection();
 
+// This whole thing is horrible, don't ever do that.
+// Pick an ORM and define proper models
 const DataSource = {
     // Find multiple elements
     find: async (tableName, args) => {
@@ -46,6 +48,30 @@ const DataSource = {
             .run(connection);
 
         const id = insertion.generated_keys[0];
+        const result = await db.table(tableName)
+            .get(id)
+            .run(connection);
+
+        return result;
+    },
+
+    // Useless example
+    capitalize: async (tableName, nodeId, field) => {
+        const { id } = fromGlobalId(nodeId);
+        const connection = await pendingConnection;
+        const query = await db.table(tableName)
+            .get(id)
+            .run(connection);
+
+        const upperCase = query[field].toUpperCase();
+        const updatedField = {};
+        updatedField[field] = upperCase;
+
+        await db.table(tableName)
+            .get(id)
+            .update(updatedField)
+            .run(connection);
+
         const result = await db.table(tableName)
             .get(id)
             .run(connection);

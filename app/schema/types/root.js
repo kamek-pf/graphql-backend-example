@@ -9,9 +9,9 @@ import {
 import getModel from 'schema/typeRegistry';
 import { nodeInterface } from 'schema/relayMapping';
 
-// Represents anyone using the graph
-const User = new GraphQLObjectType({
-    name: 'User',
+// Root type, a node serving as an entry point
+const Root = new GraphQLObjectType({
+    name: 'Root',
     interfaces: [nodeInterface],
     fields: {
         id: globalIdField(),
@@ -19,4 +19,4 @@ const User = new GraphQLObjectType({
     }
 });
 
-export default User;
+export default Root;

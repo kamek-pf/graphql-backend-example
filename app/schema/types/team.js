@@ -35,7 +35,7 @@ const Team = new GraphQLObjectType({
     }
 });
 
-// Add a new player
+// Add a new team
 const AddTeamMutation = mutationWithClientMutationId({
     name: 'AddTeamMutation',
     inputFields: {
@@ -43,14 +43,35 @@ const AddTeamMutation = mutationWithClientMutationId({
         tag: { type: GraphQLString }
     },
     outputFields: {
-        name: {
-            type: GraphQLString,
-            resolve: ({ name }) => name
+        team: {
+            type: Team,
+            resolve: ({ team }) => {
+                console.log('team resolver');
+                return team;
+            }
         }
     },
     mutateAndGetPayload: async ({ name }) => {
+        console.log('mutation');
         const res = await DataSource.insert('teams', 'Team', { name });
-        return { ...res };
+        return { team: res };
+    }
+});
+
+// Capitalize a team name
+const CapitalizeTeamMutation = mutationWithClientMutationId({
+    name: 'CapitalizeTeamMutation',
+    inputFields: {
+        id: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    outputFields: {
+        team: {
+            type: Team,
+            resolve: (team) => team
+        }
+    },
+    mutateAndGetPayload: async ({ id }) => {
+        return await DataSource.capitalize('teams', id, 'name');
     }
 });
 
@@ -64,7 +85,8 @@ const TeamQuery = {
 
 // Main mutation object
 const TeamMutation = {
-    addTeam: AddTeamMutation
+    addTeam: AddTeamMutation,
+    capitalizeTeam: CapitalizeTeamMutation
 };
 
 export { Team, TeamQuery, TeamMutation };
