@@ -3,17 +3,19 @@ import {
     GraphQLSchema
 } from 'graphql';
 
-import { PlayerQuery, PlayerMutation } from './types/player';
-import { TeamQuery, TeamMutation } from './types/team';
+import getModel from './typeRegistry';
+import User from './types/user';
 import { nodeField } from './relayMapping';
 
 // Main Query object
 const Root = new GraphQLObjectType({
     name: 'Root',
-    description: 'Root query object',
     fields: {
-        teams: TeamQuery.teams,
-        players: PlayerQuery.playerList
+        node: nodeField,
+        viewer: {
+            type: User,
+            resolve: () => ({}) // The user type has no data, it's just an entry point
+        }
     }
 });
 
@@ -22,26 +24,13 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Alter tables with this',
     fields: {
-        addPlayer: PlayerMutation.addPlayer,
-        addTeam: TeamMutation.addTeam
-    }
-});
-
-// @TODO: Remove this and use Root directly
-// See : https://github.com/facebook/relay/issues/112
-const Viewer = new GraphQLObjectType({
-    name: 'Viewer',
-    fields: {
-        node: nodeField,
-        root: {
-            type: Root,
-            resolve: () => ({})
-        }
+        addPlayer: getModel('Player').mutation.addPlayer,
+        addTeam: getModel('Team').mutation.addTeam
     }
 });
 
 const Schema = new GraphQLSchema({
-    query: Viewer,
+    query: Root,
     mutation: Mutation
 });
 

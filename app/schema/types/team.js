@@ -39,10 +39,18 @@ const Team = new GraphQLObjectType({
 const AddTeamMutation = mutationWithClientMutationId({
     name: 'AddTeamMutation',
     inputFields: {
-        name: { type: new GraphQLNonNull(GraphQLString) }
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        tag: { type: GraphQLString }
+    },
+    outputFields: {
+        name: {
+            type: GraphQLString,
+            resolve: ({ name }) => name
+        }
     },
     mutateAndGetPayload: async ({ name }) => {
-        return await DataSource.insert('teams', 'Team', { name });
+        const res = await DataSource.insert('teams', 'Team', { name });
+        return { ...res };
     }
 });
 

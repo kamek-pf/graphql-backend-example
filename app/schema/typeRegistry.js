@@ -1,18 +1,26 @@
-import { Team } from 'schema/types/team';
-import { Player } from 'schema/types/player';
+import { Team, TeamQuery, TeamMutation } from 'schema/types/team';
+import { Player, PlayerQuery, PlayerMutation } from 'schema/types/player';
 
-// Kind of meh, you wouldn't need that with a proper ORM anyway
-const getSchemaType = (type) => {
+// Kind of meh
+const getModel = (type) => {
     switch (type) {
         case 'Player':
-            return Player;
+            return {
+                type: Player,
+                query: PlayerQuery,
+                mutation: PlayerMutation
+            };
 
         case 'Team':
-            return Team;
+            return {
+                type: Team,
+                query: TeamQuery,
+                mutation: TeamMutation
+            };
 
         default:
             return null;
     }
 };
 
-export default getSchemaType;
+export default getModel;

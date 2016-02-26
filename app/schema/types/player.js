@@ -11,9 +11,11 @@ import {
     globalIdField
 } from 'graphql-relay';
 
+// import getModel from 'schema/typeRegistry';
 import DataSource from 'database';
-import getSchemaType from 'schema/typeRegistry';
 import { nodeInterface } from 'schema/relayMapping';
+
+// console.log(getModel);
 
 // Representation of the Player table
 const Player = new GraphQLObjectType({
@@ -40,10 +42,10 @@ const Player = new GraphQLObjectType({
                 return player.lastName;
             }
         },
-        team: {
-            type: getSchemaType('Team'),
-            resolve: (player) => DataSource.findOne('teams', player.team)
-        },
+        // team: {
+        //     type: getModel('Team').type,
+        //     resolve: (player) => DataSource.findOne('teams', player.team)
+        // },
         gender: {
             type: GraphQLString,
             resolve(player) {
