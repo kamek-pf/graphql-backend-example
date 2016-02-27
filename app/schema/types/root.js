@@ -6,7 +6,7 @@ import {
     globalIdField
 } from 'graphql-relay';
 
-import getModel from 'schema/typeRegistry';
+import { TeamQuery } from './team';
 import { nodeInterface } from 'schema/relayMapping';
 
 // Root type, a node serving as an entry point
@@ -15,7 +15,7 @@ const Root = new GraphQLObjectType({
     interfaces: () => [nodeInterface],
     fields: () => ({
         id: globalIdField(),
-        teams: getModel('Team').query.teams
+        teams: TeamQuery.teams
     })
 });
 

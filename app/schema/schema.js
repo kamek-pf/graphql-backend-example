@@ -4,6 +4,7 @@ import {
 } from 'graphql';
 
 import getModel from './typeRegistry';
+import { TeamMutation } from 'schema/types/team';
 import Root from './types/root';
 import { nodeField } from './relayMapping';
 
@@ -24,8 +25,8 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Alter tables with this',
     fields: () => ({
-        addTeam: getModel('Team').mutation.addTeam,
-        capitalizeTeam: getModel('Team').mutation.capitalizeTeam
+        addTeam: TeamMutation.addTeam,
+        capitalizeTeam: TeamMutation.capitalizeTeam
     })
 });
 
