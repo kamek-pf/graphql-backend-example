@@ -3,9 +3,8 @@ import {
     GraphQLSchema
 } from 'graphql';
 
-import getModel from './typeRegistry';
-import { TeamMutation } from 'schema/types/team';
 import Root from './types/root';
+import { TeamMutation } from 'schema/types/team';
 import { nodeField } from './relayMapping';
 
 // Main Query object

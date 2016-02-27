@@ -4,7 +4,6 @@ import {
 } from 'graphql-relay';
 
 import DataSource from 'database';
-import getSchemaType from './typeRegistry';
 
 const getObjectFromId = (globalId) => {
     const { type, id } = fromGlobalId(globalId);
@@ -21,8 +20,4 @@ const getObjectFromId = (globalId) => {
     }
 };
 
-const getTypeFromObject = (obj) => {
-    return getSchemaType(obj.type);
-};
-
-export const { nodeInterface, nodeField } = nodeDefinitions(getObjectFromId, getTypeFromObject);
+export const { nodeInterface, nodeField } = nodeDefinitions(getObjectFromId);

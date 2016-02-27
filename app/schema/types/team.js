@@ -17,9 +17,10 @@ import { nodeInterface } from 'schema/relayMapping';
 const Team = new GraphQLObjectType({
     name: 'Team',
     descripton: 'CS:GO Teams',
-    interfaces: () => [nodeInterface],
+    interfaces: [nodeInterface],
+    isTypeOf: () => Team,
     fields: () => ({
-        id: globalIdField(),
+        id: globalIdField('Team'),
         tag: {
             type: GraphQLString,
             resolve(team) {

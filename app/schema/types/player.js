@@ -1,5 +1,4 @@
 import {
-    GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString
 } from 'graphql';
@@ -15,13 +14,12 @@ import { nodeInterface } from 'schema/relayMapping';
 import DataSource from 'database';
 import { Team } from './team';
 
-// console.log(getModel);
-
 // Representation of the Player table
 const Player = new GraphQLObjectType({
     name: 'Player',
     descripton: 'CS:GO Competitive players',
-    interfaces: () => [nodeInterface],
+    interfaces: [nodeInterface],
+    isTypeOf: () => Player,
     fields: () => ({
         id: globalIdField(),
         name: {

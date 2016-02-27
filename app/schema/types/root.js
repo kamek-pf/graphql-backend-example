@@ -12,7 +12,8 @@ import { nodeInterface } from 'schema/relayMapping';
 // Root type, a node serving as an entry point
 const Root = new GraphQLObjectType({
     name: 'Root',
-    interfaces: () => [nodeInterface],
+    interfaces: [nodeInterface],
+    isTypeOf: () => Root,
     fields: () => ({
         id: globalIdField(),
         teams: TeamQuery.teams
