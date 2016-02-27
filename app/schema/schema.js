@@ -24,7 +24,6 @@ const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     description: 'Alter tables with this',
     fields: () => ({
-        addPlayer: getModel('Player').mutation.addPlayer,
         addTeam: getModel('Team').mutation.addTeam,
         capitalizeTeam: getModel('Team').mutation.capitalizeTeam
     })

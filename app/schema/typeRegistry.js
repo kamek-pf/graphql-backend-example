@@ -1,5 +1,5 @@
 import { Team, TeamQuery, TeamMutation } from 'schema/types/team';
-import { Player, PlayerQuery, PlayerMutation } from 'schema/types/player';
+import { Player, PlayerQuery } from 'schema/types/player';
 
 // Kind of meh
 const getModel = (type) => {
@@ -7,8 +7,7 @@ const getModel = (type) => {
         case 'Player':
             return {
                 type: Player,
-                query: PlayerQuery,
-                mutation: PlayerMutation
+                query: PlayerQuery
             };
 
         case 'Team':
