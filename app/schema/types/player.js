@@ -21,8 +21,8 @@ import { nodeInterface } from 'schema/relayMapping';
 const Player = new GraphQLObjectType({
     name: 'Player',
     descripton: 'CS:GO Competitive players',
-    interfaces: [nodeInterface],
-    fields: {
+    interfaces: () => [nodeInterface],
+    fields: () => ({
         id: globalIdField(),
         name: {
             type: GraphQLString,
@@ -52,7 +52,7 @@ const Player = new GraphQLObjectType({
                 return player.gender;
             }
         }
-    }
+    })
 });
 
 // Used below, a node representing a list of players has a connection with

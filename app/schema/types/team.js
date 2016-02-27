@@ -17,8 +17,8 @@ import { nodeInterface } from 'schema/relayMapping';
 const Team = new GraphQLObjectType({
     name: 'Team',
     descripton: 'CS:GO Teams',
-    interfaces: [nodeInterface],
-    fields: {
+    interfaces: () => [nodeInterface],
+    fields: () => ({
         id: globalIdField(),
         tag: {
             type: GraphQLString,
@@ -32,17 +32,17 @@ const Team = new GraphQLObjectType({
                 return team.name;
             }
         }
-    }
+    })
 });
 
 // Add a new team
 const AddTeamMutation = mutationWithClientMutationId({
     name: 'AddTeamMutation',
-    inputFields: {
+    inputFields: () => ({
         name: { type: new GraphQLNonNull(GraphQLString) },
         tag: { type: GraphQLString }
-    },
-    outputFields: {
+    }),
+    outputFields: () => ({
         team: {
             type: Team,
             resolve: ({ team }) => {
@@ -50,7 +50,7 @@ const AddTeamMutation = mutationWithClientMutationId({
                 return team;
             }
         }
-    },
+    }),
     mutateAndGetPayload: async ({ name }) => {
         console.log('mutation');
         const res = await DataSource.insert('teams', 'Team', { name });
@@ -61,15 +61,15 @@ const AddTeamMutation = mutationWithClientMutationId({
 // Capitalize a team name
 const CapitalizeTeamMutation = mutationWithClientMutationId({
     name: 'CapitalizeTeamMutation',
-    inputFields: {
+    inputFields: () => ({
         id: { type: new GraphQLNonNull(GraphQLString) }
-    },
-    outputFields: {
+    }),
+    outputFields: () => ({
         team: {
             type: Team,
             resolve: (team) => team
         }
-    },
+    }),
     mutateAndGetPayload: async ({ id }) => {
         return await DataSource.capitalize('teams', id, 'name');
     }

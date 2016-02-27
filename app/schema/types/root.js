@@ -12,11 +12,11 @@ import { nodeInterface } from 'schema/relayMapping';
 // Root type, a node serving as an entry point
 const Root = new GraphQLObjectType({
     name: 'Root',
-    interfaces: [nodeInterface],
-    fields: {
+    interfaces: () => [nodeInterface],
+    fields: () => ({
         id: globalIdField(),
         teams: getModel('Team').query.teams
-    }
+    })
 });
 
 export default Root;
