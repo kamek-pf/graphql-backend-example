@@ -12,6 +12,7 @@ import {
 
 import { nodeInterface } from 'schema/relayMapping';
 import DataSource from 'database';
+import Root from './root';
 
 // Representation of the Team table
 const Team = new GraphQLObjectType({
@@ -40,17 +41,22 @@ const Team = new GraphQLObjectType({
 const AddTeamMutation = mutationWithClientMutationId({
     name: 'AddTeamMutation',
     inputFields: () => ({
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        tag: { type: GraphQLString }
+        root: { type: new GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) }
     }),
     outputFields: () => ({
+        root: {
+            type: Root,
+            resolve: ({ root }) => root
+        },
         team: {
             type: Team,
-            resolve: (team) => team
+            resolve: ({ team }) => team
         }
     }),
-    mutateAndGetPayload: async ({ name, tag }) => {
-        return await DataSource.insert('teams', 'Team', { name, tag });
+    mutateAndGetPayload: async ({ root, name }) => {
+        const newTeam = await DataSource.insert('teams', 'Team', { name });
+        return { root, team: newTeam };
     }
 });
 
