@@ -46,12 +46,11 @@ const AddTeamMutation = mutationWithClientMutationId({
     outputFields: () => ({
         team: {
             type: Team,
-            resolve: ({ team }) => team
+            resolve: (team) => team
         }
     }),
-    mutateAndGetPayload: async ({ name }) => {
-        const res = await DataSource.insert('teams', 'Team', { name });
-        return { team: res };
+    mutateAndGetPayload: async ({ name, tag }) => {
+        return await DataSource.insert('teams', 'Team', { name, tag });
     }
 });
 
