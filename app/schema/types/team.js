@@ -10,13 +10,13 @@ import {
     globalIdField
 } from 'graphql-relay';
 
-import DataSource from 'database';
 import { nodeInterface } from 'schema/relayMapping';
+import DataSource from 'database';
 
 // Representation of the Team table
 const Team = new GraphQLObjectType({
     name: 'Team',
-    descripton: 'CS:GO Teams',
+    description: 'CS:GO Teams',
     interfaces: [nodeInterface],
     isTypeOf: () => Team,
     fields: () => ({
@@ -46,14 +46,10 @@ const AddTeamMutation = mutationWithClientMutationId({
     outputFields: () => ({
         team: {
             type: Team,
-            resolve: ({ team }) => {
-                console.log('team resolver');
-                return team;
-            }
+            resolve: ({ team }) => team
         }
     }),
     mutateAndGetPayload: async ({ name }) => {
-        console.log('mutation');
         const res = await DataSource.insert('teams', 'Team', { name });
         return { team: res };
     }

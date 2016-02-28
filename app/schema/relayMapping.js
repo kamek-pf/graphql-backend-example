@@ -5,6 +5,7 @@ import {
 
 import DataSource from 'database';
 
+// Could do better by decoding type from global id
 const getObjectFromId = (globalId) => {
     const { type, id } = fromGlobalId(globalId);
 

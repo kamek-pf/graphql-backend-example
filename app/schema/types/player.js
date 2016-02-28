@@ -1,12 +1,10 @@
 import {
-    GraphQLObjectType,
-    GraphQLString
+    GraphQLList,
+    GraphQLString,
+    GraphQLObjectType
 } from 'graphql';
 
 import {
-    connectionFromPromisedArray,
-    connectionDefinitions,
-    connectionArgs,
     globalIdField
 } from 'graphql-relay';
 
@@ -17,7 +15,7 @@ import { Team } from './team';
 // Representation of the Player table
 const Player = new GraphQLObjectType({
     name: 'Player',
-    descripton: 'CS:GO Competitive players',
+    description: 'CS:GO Competitive players',
     interfaces: [nodeInterface],
     isTypeOf: () => Player,
     fields: () => ({
@@ -53,21 +51,11 @@ const Player = new GraphQLObjectType({
     })
 });
 
-// Used below, a node representing a list of players has a connection with
-// each player node
-const { connectionType: playerConnection } = connectionDefinitions({
-    name: 'Player',
-    nodeType: Player
-});
-
+// Main query object
 const PlayerQuery = {
-    playerList: {
-        type: playerConnection,
-        args: connectionArgs,
-        resolve: (source, args) => connectionFromPromisedArray(
-            DataSource.find('players', args),
-            args
-        )
+    players: {
+        type: new GraphQLList(Player),
+        resolve: (source, args) => DataSource.find('players', args)
     }
 };
 
