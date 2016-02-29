@@ -51,6 +51,8 @@ const Player = new GraphQLObjectType({
     })
 });
 
+Registry.set('Player', Player);
+
 // Main query object
 const PlayerQuery = {
     players: {
@@ -58,8 +60,5 @@ const PlayerQuery = {
         resolve: (source, args) => DataSource.find('players', args)
     }
 };
-
-Registry.set('Player', Player);
-Registry.set('PlayerQuery', PlayerQuery);
 
 export { Player, PlayerQuery };

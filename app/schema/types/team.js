@@ -37,6 +37,8 @@ const Team = new GraphQLObjectType({
     })
 });
 
+Registry.set('Team', Team);
+
 // Add a new team
 const AddTeamMutation = mutationWithClientMutationId({
     name: 'AddTeamMutation',
@@ -90,9 +92,5 @@ const TeamMutation = {
     addTeam: AddTeamMutation,
     capitalizeTeam: CapitalizeTeamMutation
 };
-
-Registry.set('Team', Team);
-Registry.set('TeamQuery', TeamQuery);
-Registry.set('TeamMutation', TeamMutation);
 
 export { Team, TeamQuery, TeamMutation };
