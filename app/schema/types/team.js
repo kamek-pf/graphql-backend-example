@@ -11,6 +11,7 @@ import {
 } from 'graphql-relay';
 
 import { nodeInterface } from 'schema/relayMapping';
+import Registry from 'schema/registry';
 import DataSource from 'database';
 import Root from './root';
 
@@ -18,8 +19,7 @@ import Root from './root';
 const Team = new GraphQLObjectType({
     name: 'Team',
     description: 'CS:GO Teams',
-    interfaces: [nodeInterface],
-    isTypeOf: () => Team,
+    interfaces: () => [nodeInterface],
     fields: () => ({
         id: globalIdField('Team'),
         tag: {
@@ -90,5 +90,9 @@ const TeamMutation = {
     addTeam: AddTeamMutation,
     capitalizeTeam: CapitalizeTeamMutation
 };
+
+Registry.set('Team', Team);
+Registry.set('TeamQuery', TeamQuery);
+Registry.set('TeamMutation', TeamMutation);
 
 export { Team, TeamQuery, TeamMutation };

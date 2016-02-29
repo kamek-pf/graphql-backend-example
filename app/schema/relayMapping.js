@@ -4,21 +4,33 @@ import {
 } from 'graphql-relay';
 
 import DataSource from 'database';
+import Registry from 'schema/registry';
 
 // Could do better by decoding type from global id
-const getObjectFromId = (globalId) => {
+const getObjectFromId = async (globalId) => {
     const { type, id } = fromGlobalId(globalId);
 
     switch (type) {
+        case 'Root':
+            return { type: 'Root' };
+
         case 'Player':
-            return DataSource.findOne('players', id);
+            return {
+                type: 'Player',
+                ... await DataSource.findOne('players', id)
+            };
 
         case 'Team':
-            return DataSource.findOne('teams', id);
+            return {
+                type: 'Team',
+                ... await DataSource.findOne('teams', id)
+            };
 
         default:
             return null;
     }
 };
 
-export const { nodeInterface, nodeField } = nodeDefinitions(getObjectFromId);
+const getTypeFromObject = (obj) => Registry.get(obj.type);
+
+export const { nodeInterface, nodeField } = nodeDefinitions(getObjectFromId, getTypeFromObject);

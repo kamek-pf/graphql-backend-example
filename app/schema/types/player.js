@@ -9,6 +9,7 @@ import {
 } from 'graphql-relay';
 
 import { nodeInterface } from 'schema/relayMapping';
+import Registry from 'schema/registry';
 import DataSource from 'database';
 import { Team } from './team';
 
@@ -16,8 +17,7 @@ import { Team } from './team';
 const Player = new GraphQLObjectType({
     name: 'Player',
     description: 'CS:GO Competitive players',
-    interfaces: [nodeInterface],
-    isTypeOf: () => Player,
+    interfaces: () => [nodeInterface],
     fields: () => ({
         id: globalIdField(),
         name: {
@@ -58,5 +58,8 @@ const PlayerQuery = {
         resolve: (source, args) => DataSource.find('players', args)
     }
 };
+
+Registry.set('Player', Player);
+Registry.set('PlayerQuery', PlayerQuery);
 
 export { Player, PlayerQuery };
