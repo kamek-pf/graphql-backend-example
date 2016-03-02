@@ -16,14 +16,18 @@ const pendingConnection = createConnection();
 const DataSource = {
     // Find multiple elements
     find: async (tableName, args) => {
-        let alteredArgs = {};
+        let alteredArgs = { ...args };
         if (args.id) {
             const { id } = fromGlobalId(args.id);
-            alteredArgs = { id };
+            alteredArgs.id = id;
         }
+
+        const { orderBy, ...rest } = args;
+        alteredArgs = rest;
 
         const connection = await pendingConnection;
         const cursor = await db.table(tableName)
+            .orderBy(orderBy)
             .filter(alteredArgs)
             .run(connection);
 

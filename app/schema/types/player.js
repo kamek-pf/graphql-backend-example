@@ -16,7 +16,7 @@ import { Team } from './team';
 // Representation of the Player table
 const Player = new GraphQLObjectType({
     name: 'Player',
-    description: 'CS:GO Competitive players',
+    description: 'Player info',
     interfaces: () => [nodeInterface],
     fields: () => ({
         id: globalIdField(),
@@ -57,7 +57,13 @@ Registry.set('Player', Player);
 const PlayerQuery = {
     players: {
         type: new GraphQLList(Player),
-        resolve: (source, args) => DataSource.find('players', args)
+        args: {
+            orderBy: { type: GraphQLString }
+        },
+        resolve: (source, args) => {
+            if (!args.orderBy) args.orderBy = 'name';
+            return DataSource.find('players', args);
+        }
     }
 };
 

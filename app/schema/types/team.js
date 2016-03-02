@@ -18,7 +18,7 @@ import Root from './root';
 // Representation of the Team table
 const Team = new GraphQLObjectType({
     name: 'Team',
-    description: 'CS:GO Teams',
+    description: 'Team or Clan info',
     interfaces: () => [nodeInterface],
     fields: () => ({
         id: globalIdField('Team'),
@@ -83,7 +83,13 @@ const CapitalizeTeamMutation = mutationWithClientMutationId({
 const TeamQuery = {
     teams: {
         type: new GraphQLList(Team),
-        resolve: (source, args) => DataSource.find('teams', args)
+        args: {
+            orderBy: { type: GraphQLString }
+        },
+        resolve: (source, args) => {
+            if (!args.orderBy) args.orderBy = 'name';
+            return DataSource.find('teams', args);
+        }
     }
 };
 
